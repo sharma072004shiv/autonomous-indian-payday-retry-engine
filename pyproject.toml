@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "razorpay-payday-engine"
+version = "0.1.0"
+description = "Autonomous Indian PayDay & Mandate Retry Engine — Razorpay AI Buildathon"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+
+dependencies = [
+    # Web framework
+    "fastapi==0.115.5",
+    "uvicorn[standard]==0.32.1",
+
+    # Data validation
+    "pydantic==2.10.3",
+    "pydantic-settings==2.6.1",
+
+    # PydanticAI for structured LLM output
+    "pydantic-ai==0.0.14",
+
+    # Database
+    "aiosqlite==0.20.0",
+
+    # Environment variable loading
+    "python-dotenv==1.0.1",
+
+    # HTTP client (used by PydanticAI internally)
+    "httpx==0.28.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.4",
+    "pytest-asyncio==0.24.0",
+    "pytest-cov==6.0.0",
+    "httpx==0.28.1",   # FastAPI TestClient
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app", "benchmark"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["tests/*", "benchmark/*"]
